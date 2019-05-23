@@ -1,0 +1,90 @@
+<html>
+
+<head>
+    <title>Nest jS auth token jwt</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+</head>
+
+<body class="small">
+    <div class="container pt-2">
+        <form method="POST">
+            <div class="row">
+                <div class="card col-6">
+                    <div class="card-body">
+                        <h5 class="card-title">Auth Token</h5>
+
+                        <div class="form-group row">
+                            <label for="userid" class="col-sm-2 col-form-label">UserID</label>
+                            <div class="col">
+                                <input type="text" class="form-control" id="username" name="username" aria-describedby="userIDHelp"
+                                    placeholder="User Name" value="<%= data.username %>">
+                                <small id="userNameHelp" class="form-text text-muted">Name of user that triggers the API
+                                    call</small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="iat" class="col-sm-2 col-form-label">Issued At (iat)</label>
+                            <div class="col">
+                                <input type="text" class="form-control" id="iat" name="iat" aria-describedby="iatHelp"
+                                    placeholder="Issued timestamp" value="<%= (new Date(data.iat)).toISOString() %>">
+                                <small id="iatHelp" class="form-text text-muted">When token was issued</small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="exp" class="col-sm-2 col-form-label">Expires At (exp)</label>
+                            <div class="col">
+                                <input type="text" class="form-control" id="exp" name="exp" aria-describedby="expHelp"
+                                    placeholder="Token expiration in UTC" value="<%= (new Date(data.exp)).toISOString() %>">
+                                <small id="expHelp" class="form-text text-muted">JWT token expiration expiration</small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="useJWT" class="col-sm-2 col-form-label">Use JWT Plugin?</label>
+                            <div class="col">
+                                <input type="checkbox" class="form-control-sm" id="useJWT" name="useJWT"
+                                    aria-describedby="useJWTHelp" value="ON" <%= data.useJWT %>>
+                                <small id="useJWTHelp" class="form-text text-muted">Use JWT plugins to sign</small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label"></label>
+                            <div class="col">
+                                <button type="submit" class="btn btn-success" name="nextaction" value="encode">Encode</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card col-6">
+                    <div class="card-body">
+                        <h5 class="card-title">JWT</h5>
+
+                        <div class="form-group row">
+                            <label for="jwt" class="col-sm-2 col-form-label">JWT</label>
+                            <div class="col">
+                                <textarea class="form-control" id="jwt" name="jwt" aria-describedby="jwtHelp"
+                                    placeholder="JWT token" rows="10"><%= data.jwt %></textarea>
+                                <small id="jwtHelp" class="form-text text-muted">JWT</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
