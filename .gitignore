@@ -1,7 +1,7 @@
 ### Node ###
 # Logs
-# logs
-# *.log
+logs
+*.log
 
 # Dependency directories
 node_modules/
