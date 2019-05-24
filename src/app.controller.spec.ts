@@ -1,5 +1,5 @@
 /* 
-* NEST & third party imports
+* Nest & Third party imports
 */
 import { Test, TestingModule } from '@nestjs/testing';
 
@@ -7,17 +7,22 @@ import { Test, TestingModule } from '@nestjs/testing';
 * custom imports
 */
 import { AppController } from './app.controller';
-import { AppService } from './service/app.service';
 
 
 describe('AppController', () => {
-    let appController: AppController;
-    let app: TestingModule
-    beforeAll(async () => {
-        app = await Test.createTestingModule({
-            controllers: [AppController],
-            providers: [AppService],
-        }).compile();
-    });
+  let appController: AppController;
 
+  beforeEach(async () => {
+    const app: TestingModule = await Test.createTestingModule({
+      controllers: [AppController],
+    }).compile();
+
+    appController = app.get<AppController>(AppController);
+  });
+
+  describe('root', () => {
+    it('should return "Hello World!"', () => {
+      expect(appController.getHello()).toBe('Hello World!');
+    });
+  });
 });

@@ -1,7 +1,7 @@
 /*
  * Nest and Third party imports
  */
-import { Injectable, NestMiddleware, MiddlewareFunction } from '@nestjs/common';
+import { Injectable, NestMiddleware } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import * as crypto from "crypto";
 import * as os from "os";
@@ -25,10 +25,11 @@ export class DefaultMiddleware implements NestMiddleware {
     constructor(private logger: LogService) { }
 
     /**
-     * Hash API server name
-     * @param evUniqueID req unique id
-     */
+ * Hash API server name
+ * @param evUniqueID req unique id
+ */
     hashAPIServer(evUniqueID) {
+
         let taskName = "hashAPIServer";
 
         try {
@@ -49,44 +50,42 @@ export class DefaultMiddleware implements NestMiddleware {
         }
     };
 
-    //Nest middleware function 
-    resolve(): MiddlewareFunction {
-        let taskName = "In resolve method";
 
-        return (req, res, next) => {
+    use(req: any, res: any, next: () => void) {
 
-            try {
+        let taskName = "defaut middleware handler";
 
-                /* create unique ID */
-                const callGUID = uuid();
+        try {
 
-                this.logger.debug(`[${callGUID}] ${this.MODULENAME} (${taskName})`);
+            /* create unique ID */
+            const callGUID = uuid();
 
-                // assign a unique id to this request and response
-                req.evUniqueID = callGUID;
-                res.locals.evUniqueID = callGUID;//to share between middlewares
+            this.logger.debug(`[${callGUID}] ${this.MODULENAME} (${taskName})`);
 
-                // create API response metadata object since we can setup initial information
-                this.apiResp.evUniqueID = callGUID;
-                this.apiResp.requestURL = req.originalUrl;
-                this.apiResp.apiServer = this.hashAPIServer(req.evUniqueID);
-                this.apiResp.apiBuildVersion = process.env.npm_package_version || '--NOT AVAILABLE--';
-                this.apiResp.requestTS = moment().format();
-                this.apiResp.elapsedTimeInMS = Date.now();
-                this.apiResp.tasks = [];
+            // assign a unique id to this request and response
+            req.evUniqueID = callGUID;
+            res.locals.evUniqueID = callGUID;//to share between middlewares
 
-                req.metadata = this.apiResp;
+            // create API response metadata object since we can setup initial information
+            this.apiResp.evUniqueID = callGUID;
+            this.apiResp.requestURL = req.originalUrl;
+            this.apiResp.apiServer = this.hashAPIServer(req.evUniqueID);
+            this.apiResp.apiBuildVersion = process.env.npm_package_version || '--NOT AVAILABLE--';
+            this.apiResp.requestTS = moment().format();
+            this.apiResp.elapsedTimeInMS = Date.now();
+            this.apiResp.tasks = [];
 
-                next();
+            req.metadata = this.apiResp;
 
-            } catch (error) {
+            next();
 
-                this.logger.error(`[${req.evUniqueID}] ${this.MODULENAME} (${taskName}): ${error.message}`);
-                this.logger.debug(`[${req.evUniqueID}] ${this.MODULENAME} (${taskName}): ${error.stack}`);
+        } catch (error) {
 
-                throw error;
-            }
+            this.logger.error(`[${req.evUniqueID}] ${this.MODULENAME} (${taskName}): ${error.message}`);
+            this.logger.debug(`[${req.evUniqueID}] ${this.MODULENAME} (${taskName}): ${error.stack}`);
 
+            throw error;
         }
     }
+
 }

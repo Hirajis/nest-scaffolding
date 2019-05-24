@@ -1,44 +1,33 @@
 /* 
-* NEST & Third party imports
+* Nest & Third party imports
 */
-import { Test } from '@nestjs/testing';
-import { Req, Res } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
+import * as request from 'supertest';
 
 /* 
-* Custom imports
+* custom imports
 */
-import { PingController } from './ping.controller';
-import { AppService } from '../service/app.service';
+import { AppModule } from '../app.module';
 
 
-// Unit test method
-describe('Ping Controller', () => {
+describe('AppController (e2e)', () => {
+  let app;
 
-  let pingController: PingController;
-  let appService: AppService;
-
-  beforeAll(async () => {
-
-    const module = await Test.createTestingModule({
-      controllers: [PingController],
-      providers: [AppService],
+  beforeEach(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
     }).compile();
 
-    appService = module.get<AppService>(AppService);
-    pingController = module.get<PingController>(PingController);
-
+    app = moduleFixture.createNestApplication();
+    await app.init();
   });
-
-
-  describe('ping controller test', () => {
-    it('should return errcode', async () => {
-      const metadata = {
-        errCode: 0,
-      }
-      let test = pingController.ping(Req, Res);
-      expect(test.errCode).toBe(metadata.errCode);
-    });
-
+  
+  //ping unit test method
+  it('/ping controller return json', () => {
+    return request(app.getHttpServer())
+      .get('/ping')
+      .expect(200)
+      .expect('Content-type', /json/)
   });
 
 });

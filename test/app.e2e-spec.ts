@@ -9,7 +9,6 @@ import * as request from 'supertest';
 */
 import { AppModule } from './../src/app.module';
 
-
 describe('AppController (e2e)', () => {
   let app;
 
@@ -21,13 +20,11 @@ describe('AppController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     await app.init();
   });
-  
-  //ping unit test method
-  it('/ping controller return json', () => {
-    return request(app.getHttpServer())
-      .get('/ping')
-      .expect(200)
-      .expect('Content-type', /json/)
-  });
 
+  it('/ (GET)', () => {
+    return request(app.getHttpServer())
+      .get('/')
+      .expect(200)
+      .expect('Hello World!');
+  });
 });
