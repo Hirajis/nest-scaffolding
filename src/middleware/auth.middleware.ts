@@ -8,7 +8,6 @@ import * as jwt from 'jsonwebtoken';
 * Custom imports
 */
 import { LogService } from '../service/logger.service';
-import { error } from 'util';
 
 /* 
 * JWT Authentication middleware
