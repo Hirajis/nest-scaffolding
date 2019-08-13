@@ -16,18 +16,21 @@ import { responseMetadataDTO } from '../dto/responsemetadata.dto';
 */
 @Controller('ping')
 export class PingController {
-   
+
     MODULENAME = "PingController";
 
-    constructor(private logger: LogService, private appService: AppService) { }
 
-   //Ping route
+
+    constructor(private logger: LogService, private appService: AppService) {
+
+    }
+
+    //Ping route
     @Get()
     @ApiOperation({ title: 'Ping route for health check' })
     @ApiResponse({ status: 200, description: 'Success', type: responseMetadataDTO })
     @ApiResponse({ status: 404, description: 'Not Found', type: responseMetadataDTO })
     ping(@Req() req, @Res() res) {
-
         const taskName = "/ping";
         const httpCode = 200; //default
 

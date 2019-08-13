@@ -73,6 +73,8 @@ export class DefaultMiddleware implements NestMiddleware {
             this.apiResp.apiBuildVersion = process.env.npm_package_version || '--NOT AVAILABLE--';
             this.apiResp.requestTS = moment().format();
             this.apiResp.elapsedTimeInMS = Date.now();
+            this.apiResp.errMsg = "--NOT SPECIFIED--";
+            this.apiResp.errCode = 1;
             this.apiResp.tasks = [];
 
             req.metadata = this.apiResp;

@@ -1,10 +1,11 @@
-/* 
+/*
 * Nest & Third party imports
 */
 import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
-/* 
+/*
 * Custom imports
 */
 import { DefaultMiddleware } from './middleware/default.middleware';
@@ -17,13 +18,14 @@ import { ApiUtils } from './devutils/apiutils.route';
 import { ErrorFilter } from './service/errorhandler.service';
 import { ErrorcodesService } from './errorcodes/errorcodes.service';
 import { LogService } from './service/logger.service';
-
+//import { OrderService } from './order/order.service';
+import { OrderModule } from './order/order.module';
 
 /*
 * Main module and Database connection configuration
 */
 @Module({
-  imports: [ErrorcodesModule],
+  imports: [TypeOrmModule.forRoot(), ErrorcodesModule, OrderModule],
   controllers: [PingController, AppController, ApiUtils],
   providers: [LogService, AppService, ErrorcodesService, {
     provide: APP_FILTER,
