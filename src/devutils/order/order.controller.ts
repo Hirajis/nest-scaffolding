@@ -4,9 +4,9 @@ import { ApiResponse, ApiOperation } from '@nestjs/swagger';
 /* 
 * Custome imports
 */
-import { AppService } from '../service/app.service';
+import { AppService } from '../../service/app.service';
 import { OrderService } from './order.service';
-import { LogService } from '../service/logger.service';
+import { LogService } from '../../service/logger.service';
 
 @Controller('order')
 export class OrderController {

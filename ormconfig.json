@@ -1,12 +1,12 @@
 {
     "type": "mysql",
-    "host": "localhost",
     "port": 3306,
+    "host": "localhost",
     "username": "root",
     "password": "",
-    "database": "jobcard",
+    "database": "test",
     "entities": [
         "src/**/*.entity{.ts,.js}"
     ],
-    "synchronize": true
+    "synchronize": false
 }

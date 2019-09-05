@@ -10,6 +10,7 @@ export class OrderService {
     ) { }
 
     findAll(): Promise<Order[]> {
+        console.log("res", this.orderRepository.find())
         return this.orderRepository.find();
     }
 

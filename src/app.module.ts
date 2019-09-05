@@ -19,7 +19,7 @@ import { ErrorFilter } from './service/errorhandler.service';
 import { ErrorcodesService } from './errorcodes/errorcodes.service';
 import { LogService } from './service/logger.service';
 //import { OrderService } from './order/order.service';
-import { OrderModule } from './order/order.module';
+import { OrderModule } from './devutils/order/order.module';
 
 /*
 * Main module and Database connection configuration

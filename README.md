@@ -34,22 +34,48 @@
 $ npm install
 ```
 
+## Set the typeorm configuration to connect db
+```
+1. Put db creds in ormconfig.json file
+  Example:
+  {
+    "type": "mysql",
+    "port": 3306,
+    "host": "localhost",
+    "username": "root",
+    "password": "",
+    "database": "test",
+    "entities": [
+        "src/**/*.entity{.ts,.js}"
+    ],
+    "synchronize": false
+}
+2. Be carefull while setting up "synchronize"
+ synchronize - Indicates if database schema should be auto created on every application launch. Be careful with this option and don't use this in production - otherwise you can lose production data. This option is useful during debug and development. 
+
+  Make sure you are using synchronize = false, if you are connecting to existing db, and you don't want your entities to be in sync with tables,
+
+  Please don't create entities manually, use typeorm entity generator link: https://www.npmjs.com/package/typeorm-model-generator to create entities 
+
+  Example: typeorm-model-generator -h localhost -d test -p 3306 -u root -x "" -e mysql
+
+ 3. Please refer https://github.com/typeorm/typeorm/blob/master/docs/connection-options.md for connection options as per databases```
+
+
+```
 ## Running the app
 
-```bash
-# development
+## development without watch mode
 $ npm run start
 
-# watch mode
+## development with watch mode
 $ npm run start:dev
 
-# production mode
+## production mode
 $ npm run start:prod
-```
 
 ## Test
-
-```bash
+```
 # unit tests
 $ npm run test
 
