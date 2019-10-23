@@ -34,9 +34,14 @@
 $ npm install
 ```
 
+## First install nestjs cli on your local machine with command
+npm i -g @nestjs/cli
+
 ## Set the typeorm configuration to connect db
 ```
-1. Put db creds in ormconfig.json file
+1. Create ormconfig.json file in root directory if it is not exist
+
+2. Put db creds in ormconfig.json file
   Example:
   {
     "type": "mysql",
@@ -50,7 +55,7 @@ $ npm install
     ],
     "synchronize": false
 }
-2. Be carefull while setting up "synchronize"
+3. Be carefull while setting up "synchronize"
  synchronize - Indicates if database schema should be auto created on every application launch. Be careful with this option and don't use this in production - otherwise you can lose production data. This option is useful during debug and development. 
 
   Make sure you are using synchronize = false, if you are connecting to existing db, and you don't want your entities to be in sync with tables,
@@ -59,7 +64,7 @@ $ npm install
 
   Example: typeorm-model-generator -h localhost -d test -p 3306 -u root -x "" -e mysql
 
- 3. Please refer https://github.com/typeorm/typeorm/blob/master/docs/connection-options.md for connection options as per databases```
+ 4. Please refer https://github.com/typeorm/typeorm/blob/master/docs/connection-options.md for connection options as per databases```
 
 
 ```
