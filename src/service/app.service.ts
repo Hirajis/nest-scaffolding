@@ -9,7 +9,10 @@ import * as jwt from 'jsonwebtoken';
 /* 
 * Custom imports
 */
-import { apiResponse } from '../interfaces/metadata.interface';
+import { TasksDataDTO } from '../dto/task.metadta.dto';
+import { APIResponseMetadataDTO } from '../dto/apiresponse.metadata.dto';
+import { ResponseMetadataDTO } from '../dto/response.metadata.dto';
+
 import { ErrorcodesService } from '../errorcodes/errorcodes.service';
 import { LogService } from './logger.service';
 
@@ -30,27 +33,61 @@ export class AppService {
      * @param {JSON}   metadata JSON metadata object
      * @param {JSON}   task   task metadata object
      */
-    endMetaData(evUniqueID, errCode, errMsg, metadata: apiResponse, task) {
+    endMetaData(evUniqueID: string, errCode: number, errMsg: string, metadata: ResponseMetadataDTO, task: TasksDataDTO): APIResponseMetadataDTO {
 
         const taskName = "endMetaData method";
 
         try {
 
-            this.logger.debug(`[${evUniqueID}](${this.MODULENAME})-${taskName}- QueryData:${JSON.stringify(metadata)}`);
+
+            this.logger.debug(`[${evUniqueID}](${this.MODULENAME})-${taskName}`);
 
             const errorData = this.errorService.getErrorInformation(evUniqueID, errCode, errMsg);
 
             metadata.errCode = errorData.code;
             metadata.errMsg = errorData.message;
             metadata.elapsedTimeInMS = moment(Date.now()).diff(metadata.requestTS, 'milliseconds');
-            metadata.tasks[metadata.tasks.push({
-                name: task.name,
-                info: task.info,
-                startTS: moment().format(),
-                elapsedTimeInMS: moment(Date.now()).diff(task.elapsedTimeInMs, 'milliseconds')
-            }) - 1];
+            if (process.env.NODE_ENV == 'development') {
+                metadata.tasks[metadata.tasks.push({
+                    name: task.name,
+                    info: task.info,
+                    startTS: moment().format(),
+                    elapsedTimeInMS: moment(Date.now()).diff(task.elapsedTimeInMS, 'milliseconds')
+                }) - 1];
+            }
 
-            return metadata
+            return { metadata };
+
+        } catch (error) {
+
+            this.logger.error(`[${evUniqueID}](${this.MODULENAME})-${taskName}-${error.message}`);
+            this.logger.debug(`[${evUniqueID}](${this.MODULENAME})-${taskName}-${error.stack}`);
+
+            throw error;
+        }
+    }
+
+    /**
+     * @param {string} evUniqueID EV Unique ID
+     * @param {number} task  task name
+     * @param {string} info  task info
+     */
+    createTaskMetaData(evUniqueID, task, info): TasksDataDTO {
+
+        const taskName = "createTaskMetaData method";
+
+        try {
+
+            this.logger.debug(`[${evUniqueID}](${this.MODULENAME})-${taskName}`);
+
+            const taskMetaData = {
+                name: task,
+                info: info,
+                elapsedTimeInMS: Date.now(),
+                startTS: moment().format(),
+            }
+
+            return taskMetaData;
 
         } catch (error) {
 

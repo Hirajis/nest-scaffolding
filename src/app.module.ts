@@ -10,7 +10,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 */
 import { DefaultMiddleware } from './middleware/default.middleware';
 import { AuthMiddleware } from './middleware/auth.middleware';
-import { PingController } from './ping/ping.controller';
 import { AppController } from './app.controller';
 import { AppService } from './service/app.service';
 import { ErrorcodesModule } from './errorcodes/errorcodes.module';
@@ -26,7 +25,7 @@ import { OrderModule } from './devutils/order/order.module';
 */
 @Module({
   imports: [TypeOrmModule.forRoot(), ErrorcodesModule, OrderModule],
-  controllers: [PingController, AppController, ApiUtils],
+  controllers: [AppController, ApiUtils],
   providers: [LogService, AppService, ErrorcodesService, {
     provide: APP_FILTER,
     useClass: ErrorFilter,

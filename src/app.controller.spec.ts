@@ -2,27 +2,34 @@
 * Nest & Third party imports
 */
 import { Test, TestingModule } from '@nestjs/testing';
+import * as request from 'supertest';
 
 /* 
 * custom imports
 */
+import { AppModule } from './app.module';
 import { AppController } from './app.controller';
 
 
 describe('AppController', () => {
-  let appController: AppController;
+  let app;
 
   beforeEach(async () => {
-    const app: TestingModule = await Test.createTestingModule({
-      controllers: [AppController],
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
     }).compile();
 
-    appController = app.get<AppController>(AppController);
+    app = moduleFixture.createNestApplication();
+    await app.init();
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
-    });
+
+  //ping unit test method
+  it('/ping controller return json', () => {
+    return request(app.getHttpServer())
+      .get('/ping')
+      .expect(200)
+      .expect('Content-type', /json/)
   });
+
 });

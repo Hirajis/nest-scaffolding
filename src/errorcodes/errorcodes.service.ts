@@ -15,7 +15,7 @@ import { LogService } from '../service/logger.service';
 */
 @Injectable()
 export class ErrorcodesService {
-    
+
     MODULENAME = "ErrorcodesService";
 
     constructor(private logger: LogService, private generalcodes: GeneralCodes) { }

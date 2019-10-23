@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Res } from '@nestjs/common';
+import { Controller, Get, Req, Res, Query, Param, Post, Delete, Body } from '@nestjs/common';
 import { ApiResponse, ApiOperation } from '@nestjs/swagger';
 
 /* 
@@ -8,50 +8,187 @@ import { AppService } from '../../service/app.service';
 import { OrderService } from './order.service';
 import { LogService } from '../../service/logger.service';
 
-@Controller('order')
-export class OrderController {
+import { APIResponseMetadataDTO } from 'src/dto/apiresponse.metadata.dto';
+import { OrderListAPIRespDTO } from './dto/apiresponse.order.dto'
+import { CreateOrderDTO, OrderIdDTO } from './dto/apirequest.validator.dto'
 
+@Controller('orders')
+export class OrderController {
     MODULENAME = "OrderController";
 
-
-
     constructor(private logger: LogService, private appService: AppService, private orderService: OrderService) {
-
     }
 
-    //Ping route
+    //get orders
     @Get()
-    // @ApiOperation({ title: 'orders route to fech all orders' })
-    //@ApiResponse({ status: 200, description: 'Success', type: responseMetadataDTO })
-    //@ApiResponse({ status: 404, description: 'Not Found', type: responseMetadataDTO })
-    orders(@Req() req, @Res() res) {
-        const taskName = "/orders";
+    @ApiOperation({ title: 'Get orders' })
+    @ApiResponse({ status: 200, description: 'Success', type: OrderListAPIRespDTO })
+    @ApiResponse({ status: 404, description: 'Not Found', type: APIResponseMetadataDTO })
+    async getOrders(@Req() req, @Res() res) {
+        const taskName = "getOrders";
         const httpCode = 200; //default
+        const evUniqueID = req.evUniqueID;
 
         try {
 
-            this.logger.debug(`[${req.evUniqueID}](${this.MODULENAME})-${taskName}`);
+            this.logger.debug(`[${evUniqueID}](${this.MODULENAME})-${taskName}`);
 
-            const task = {
-                name: taskName,
-                info: "orders controller executed",
-                elapsedTimeInMs: Date.now()
-            }
+            let apiMetaData = req.apiMeta;//metadata from default middleware
+            let task = this.appService.createTaskMetaData(evUniqueID, taskName, "orders controller executed");//create task
 
-            //throw new Error("error");
-            this.orderService.findAll().then((resp) => {
-                let pingdata = this.appService.endMetaData(req.evUniqueID, 0, "Executed Successfully", req.metadata, task);
-                pingdata['result'] = resp;
+            let resp = await this.orderService.findAll();
 
-                return res.status(httpCode).send(pingdata);
-            })
+            let endMetaData = this.appService.endMetaData(evUniqueID, 0, "", apiMetaData, task);
+            endMetaData['result'] = resp;
 
-        } catch (error) {
+            return res.status(httpCode).send(endMetaData);
 
-            this.logger.debug(`[${req.evUniqueID}](${this.MODULENAME})-(${taskName})- ${error.stack}`);
-            this.logger.error(`[${req.evUniqueID}](${this.MODULENAME})-(${taskName})- ${error.message}`);
+        } catch (e) {
 
-            throw error;
+            this.logger.debug(`[${evUniqueID}](${this.MODULENAME})-(${taskName})- ${e.stack}`);
+            this.logger.error(`[${evUniqueID}](${this.MODULENAME})-(${taskName})- ${e.message}`);
+
+            throw e;
+
+        }
+
+    }
+
+    //get order
+    @Get("/:id")
+    @ApiOperation({ title: 'Get order' })
+    @ApiResponse({ status: 200, description: 'Success', type: OrderListAPIRespDTO })
+    @ApiResponse({ status: 404, description: 'Not Found', type: APIResponseMetadataDTO })
+    async getOrderById(@Req() req, @Param() param: OrderIdDTO, @Res() res) {
+        const taskName = "getOrderById";
+        const httpCode = 200; //default
+        const evUniqueID = req.evUniqueID;
+
+        try {
+
+            this.logger.debug(`[${evUniqueID}](${this.MODULENAME})-${taskName}`);
+
+            let apiMetaData = req.apiMeta;//metadata from default middleware
+            let task = this.appService.createTaskMetaData(evUniqueID, taskName, "orders controller executed");//create task
+
+            let resp = await this.orderService.findById(req.params.id);
+
+            let endMetaData = this.appService.endMetaData(evUniqueID, 0, "", apiMetaData, task);
+            endMetaData['result'] = resp;
+
+            return res.status(httpCode).send(endMetaData);
+
+        } catch (e) {
+
+            this.logger.debug(`[${evUniqueID}](${this.MODULENAME})-(${taskName})- ${e.stack}`);
+            this.logger.error(`[${evUniqueID}](${this.MODULENAME})-(${taskName})- ${e.message}`);
+
+            throw e;
+
+        }
+
+    }
+
+    //Create an order
+    @Post()
+    @ApiOperation({ title: 'Create an order' })
+    @ApiResponse({ status: 201, description: 'Record created success', type: APIResponseMetadataDTO })
+    @ApiResponse({ status: 404, description: 'Not Found', type: APIResponseMetadataDTO })
+    async createOrder(@Req() req, @Body() createOrder: CreateOrderDTO, @Res() res) {
+        const taskName = "createOrder";
+        const httpCode = 200; //default
+        const evUniqueID = req.evUniqueID;
+
+        try {
+
+            this.logger.debug(`[${evUniqueID}](${this.MODULENAME})-${taskName}`);
+
+            let apiMetaData = req.apiMeta;//metadata from default middleware
+            let task = this.appService.createTaskMetaData(evUniqueID, taskName, "orders controller executed");//create task
+
+            let resp = await this.orderService.create(createOrder);
+
+            let endMetaData = this.appService.endMetaData(evUniqueID, 0, "", apiMetaData, task);
+            endMetaData['result'] = resp;
+
+            return res.status(httpCode).send(endMetaData);
+
+        } catch (e) {
+
+            this.logger.debug(`[${evUniqueID}](${this.MODULENAME})-(${taskName})- ${e.stack}`);
+            this.logger.error(`[${evUniqueID}](${this.MODULENAME})-(${taskName})- ${e.message}`);
+
+            throw e;
+
+        }
+
+    }
+
+    //update an order
+    @Post("/:id")
+    @ApiOperation({ title: 'Update order' })
+    @ApiResponse({ status: 200, description: 'Success', type: APIResponseMetadataDTO })
+    @ApiResponse({ status: 404, description: 'Not Found', type: APIResponseMetadataDTO })
+    async updateOrder(@Req() req, @Res() res) {
+        const taskName = "updateOrder";
+        const httpCode = 200; //default
+        const evUniqueID = req.evUniqueID;
+
+        try {
+
+            this.logger.debug(`[${evUniqueID}](${this.MODULENAME})-${taskName}`);
+
+            let apiMetaData = req.apiMeta;//metadata from default middleware
+            let task = this.appService.createTaskMetaData(evUniqueID, taskName, "orders controller executed");//create task
+
+            let resp = await this.orderService.create(req.body);
+
+            let endMetaData = this.appService.endMetaData(evUniqueID, 0, "", apiMetaData, task);
+            endMetaData['result'] = resp;
+
+            return res.status(httpCode).send(endMetaData);
+
+        } catch (e) {
+
+            this.logger.debug(`[${evUniqueID}](${this.MODULENAME})-(${taskName})- ${e.stack}`);
+            this.logger.error(`[${evUniqueID}](${this.MODULENAME})-(${taskName})- ${e.message}`);
+
+            throw e;
+
+        }
+
+    }
+
+    //Delete order
+    @Delete("/:id")
+    @ApiOperation({ title: 'Delete order' })
+    @ApiResponse({ status: 200, description: 'Success', type: APIResponseMetadataDTO })
+    @ApiResponse({ status: 404, description: 'Not Found', type: APIResponseMetadataDTO })
+    async deleteOrder(@Req() req, @Res() res) {
+        const taskName = "Delete order";
+        const httpCode = 200; //default
+        const evUniqueID = req.evUniqueID;
+
+        try {
+
+            this.logger.debug(`[${evUniqueID}](${this.MODULENAME})-${taskName}`);
+
+            let apiMetaData = req.apiMeta;//metadata from default middleware
+            let task = this.appService.createTaskMetaData(evUniqueID, taskName, "orders controller executed");//create task
+
+            let resp = await this.orderService.create(req.body);
+
+            let endMetaData = this.appService.endMetaData(evUniqueID, 0, "", apiMetaData, task);
+            endMetaData['result'] = resp;
+
+            return res.status(httpCode).send(endMetaData);
+
+        } catch (e) {
+
+            this.logger.debug(`[${evUniqueID}](${this.MODULENAME})-(${taskName})- ${e.stack}`);
+            this.logger.error(`[${evUniqueID}](${this.MODULENAME})-(${taskName})- ${e.message}`);
+
+            throw e;
 
         }
 

@@ -10,7 +10,6 @@ import * as moment from "moment";
 /* 
 * custom imports
 */
-import { apiResponse } from '../interfaces/metadata.interface';
 import { LogService } from '../service/logger.service';
 
 
@@ -20,9 +19,8 @@ export class DefaultMiddleware implements NestMiddleware {
 
     MODULENAME = "DefaultMiddleware";
 
-    apiResp = <apiResponse>{};
-
-    constructor(private logger: LogService) { }
+    constructor(private logger: LogService) {
+    }
 
     /**
  * Hash API server name
@@ -52,32 +50,33 @@ export class DefaultMiddleware implements NestMiddleware {
 
 
     use(req: any, res: any, next: () => void) {
-
         let taskName = "defaut middleware handler";
+
+        let apiResp = {};
 
         try {
 
             /* create unique ID */
             const callGUID = uuid();
 
-            this.logger.debug(`[${callGUID}] ${this.MODULENAME} (${taskName})`);
+            this.logger.debug(`[${callGUID}](${this.MODULENAME}) - ${taskName}`);
 
             // assign a unique id to this request and response
             req.evUniqueID = callGUID;
             res.locals.evUniqueID = callGUID;//to share between middlewares
 
             // create API response metadata object since we can setup initial information
-            this.apiResp.evUniqueID = callGUID;
-            this.apiResp.requestURL = req.originalUrl;
-            this.apiResp.apiServer = this.hashAPIServer(req.evUniqueID);
-            this.apiResp.apiBuildVersion = process.env.npm_package_version || '--NOT AVAILABLE--';
-            this.apiResp.requestTS = moment().format();
-            this.apiResp.elapsedTimeInMS = Date.now();
-            this.apiResp.errMsg = "--NOT SPECIFIED--";
-            this.apiResp.errCode = 1;
-            this.apiResp.tasks = [];
+            apiResp["evUniqueID"] = callGUID;
+            apiResp["requestURL"] = req.originalUrl;
+            apiResp["apiServer"] = this.hashAPIServer(req.evUniqueID);
+            apiResp["apiBuildVersion"] = process.env.npm_package_version || '--NOT AVAILABLE--';
+            apiResp["requestTS"] = moment().format();
+            apiResp["elapsedTimeInMS"] = Date.now();
+            apiResp["errMsg"] = "--NOT SPECIFIED--";
+            apiResp["errCode"] = 1;
+            apiResp["tasks"] = [];
 
-            req.metadata = this.apiResp;
+            req.apiMeta = apiResp;
 
             next();
 

@@ -24,7 +24,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
     AppModule,
   );
-  
+
   let Logger = new LogService();
 
   /* app initialization */
@@ -32,14 +32,14 @@ async function bootstrap() {
   app.use(bodyParser.json());
   app.enableCors();
   app.setGlobalPrefix(process.env.VERSION);
-  app.useStaticAssets(join(__dirname,'..','public'));
-  app.setBaseViewsDir(join(__dirname,'..','/src/views'))
+  app.useStaticAssets(join(__dirname, '..', 'public'));
+  app.setBaseViewsDir(join(__dirname, '..', '/src/views'))
   app.setViewEngine('ejs');
 
 
   const options = new DocumentBuilder()
-    .setTitle('Nest Js ')
-    .setDescription('The Nest Js api description')
+    .setTitle('Nest Js Scaffolding')
+    .setDescription('Put your application description if you are using this scaffolding')
     .setVersion(process.env.SwaggerVersion)
     .addBearerAuth('Authorization', 'header', 'apiKey')
     .setSchemes("https", "http")
