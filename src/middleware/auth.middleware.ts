@@ -8,6 +8,7 @@ import * as jwt from 'jsonwebtoken';
 * Custom imports
 */
 import { LogService } from '../service/logger.service';
+import { AppService } from 'src/service/app.service';
 
 /* 
 * JWT Authentication middleware
@@ -17,51 +18,62 @@ export class AuthMiddleware implements NestMiddleware {
 
   MODULENAME = 'AuthMiddleware';
 
-  constructor(private logger: LogService) { }
+  constructor(private logger: LogService, private appService: AppService) { }
 
   async use(req: any, res: any, next: () => void) {
-
     let taskName = "JWTAuthentication";
+    const evUniqueID = req.evUniqueID;// event unique request id  
+    let httpCode = 200; //default
+    let errorCode = 1; //default
 
     try {
 
-      this.logger.debug(`[${req.evUniqueID}] ${this.MODULENAME} (${taskName})`);
+      this.logger.debug(`[${evUniqueID}] ${this.MODULENAME} (${taskName})`);
 
-      const token = req.headers.authorization;
+      let apiMetaData = req.apiMeta;//metadata from default middleware
+      let task = this.appService.createTaskMetaData(evUniqueID, taskName, "orders controller executed");//create task
 
-      if (token) {
+      if (req.headers['authorization']) {
 
         try {
 
-          /* verify token method */
-          let check = await jwt.verify(token, process.env.JWTSECRET);
-          req.check = check;
-          next();
+          let authorization = req.headers['authorization'].split(' ');//read token from header
 
-        } catch (error) {
+          if (authorization[0] !== 'Bearer') {
+            httpCode = 401;
+            errorCode = 11;
+          } else {
+            /* verify token method */
+            req.jwt = await jwt.verify(authorization[1], process.env.JWTSECRET);
 
-          this.logger.error(`[${req.evUniqueID}] ${this.MODULENAME} (${taskName}): ${JSON.stringify(error.message)}`);
-          this.logger.debug(`[${req.evUniqueID}] ${this.MODULENAME} (${taskName}): ${JSON.stringify(error.message)}`);
+            return next();
+          }
 
-          throw (error);
+        } catch (e) {
+          httpCode = 403;
+          errorCode = 12;
+
+          this.logger.debug(`[${evUniqueID}](${this.MODULENAME})-(${taskName})- ${e.stack}`);
+          this.logger.error(`[${evUniqueID}](${this.MODULENAME})-(${taskName})- ${e.message}`);
+
         }
 
       } else {
-
-        this.logger.error(`[${req.evUniqueID}] ${this.MODULENAME} (${taskName}): Auth token missing`);
-        this.logger.debug(`[${req.evUniqueID}] ${this.MODULENAME} (${taskName}):Auth token missing`);
-
-
-        throw new Error("Auth token missing");
+        httpCode = 401;
+        errorCode = 11;
 
       }
 
-    } catch (error) {
+      let apiResp = this.appService.endMetaData(evUniqueID, errorCode, "", apiMetaData, task);
 
-      this.logger.error(`[${req.evUniqueID}] ${this.MODULENAME} (${taskName}): ${error.message}`);
-      this.logger.debug(`[${req.evUniqueID}] ${this.MODULENAME} (${taskName}): ${error.message}`);
+      return res.status(httpCode).send(apiResp);
 
-      throw error;
+    } catch (e) {
+
+      this.logger.error(`[${req.evUniqueID}] ${this.MODULENAME} (${taskName}): ${e.message}`);
+      this.logger.debug(`[${req.evUniqueID}] ${this.MODULENAME} (${taskName}): ${e.stack}`);
+
+      throw e;
     }
   }
 

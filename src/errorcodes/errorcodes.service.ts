@@ -6,7 +6,7 @@ import { Injectable } from '@nestjs/common';
 /* 
 * custom imports
 */
-import { GeneralCodes } from './general.errocodes.config';
+import { ErrorCodes } from './errocodes.config';
 import { errorCodes } from './interface/errorcode.interface';
 import { LogService } from '../service/logger.service';
 
@@ -18,7 +18,7 @@ export class ErrorcodesService {
 
     MODULENAME = "ErrorcodesService";
 
-    constructor(private logger: LogService, private generalcodes: GeneralCodes) { }
+    constructor(private logger: LogService, private errorCodes: ErrorCodes) { }
 
     /**
      * 
@@ -33,13 +33,11 @@ export class ErrorcodesService {
 
             this.logger.debug(`[${evUniqueID}] ${this.MODULENAME}(${taskName})`);
 
-            let errorData = this.generalcodes.ErrorCodes
-
             // convert to int just in case errCode is not
             const eCode = parseInt(errCode);
 
             // get error info
-            const filtered = errorData.filter((item) => {
+            const filtered = this.errorCodes.ErrorCodes.filter((item) => {
                 return (item.code === eCode);
             });
 

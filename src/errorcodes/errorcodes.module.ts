@@ -8,13 +8,12 @@ import { Module } from '@nestjs/common';
 */
 import { ErrorcodesService } from './errorcodes.service';
 import { ErrorcodesController } from './errorcodes.controller';
-import { GeneralCodes } from './general.errocodes.config';
-import { LogService } from '../service/logger.service';
+import { ErrorCodes } from './errocodes.config';
 
 
 @Module({
-  providers: [LogService, ErrorcodesService, GeneralCodes],
-  controllers: [ErrorcodesController],
-  exports: [ErrorcodesService, GeneralCodes]
+  providers: [ErrorcodesService, ErrorCodes],
+  controllers: [ErrorcodesController]
 })
+
 export class ErrorcodesModule { }

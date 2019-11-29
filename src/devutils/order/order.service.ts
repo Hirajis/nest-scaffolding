@@ -4,11 +4,10 @@ import { Repository } from 'typeorm';
 
 import { Order } from './entity/order.entity';
 import { OrderDTO } from './dto/response.order.dto';
-import { LogService } from 'src/service/logger.service';
 
 @Injectable()
 export class OrderService {
-    constructor(@InjectRepository(Order) private readonly orderRepository: Repository<Order>, private logger: LogService) { }
+    constructor(@InjectRepository(Order) private readonly orderRepository: Repository<Order>) { }
 
     async findAll(): Promise<OrderDTO[]> {
 

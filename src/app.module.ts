@@ -11,26 +11,25 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DefaultMiddleware } from './middleware/default.middleware';
 import { AuthMiddleware } from './middleware/auth.middleware';
 import { AppController } from './app.controller';
-import { AppService } from './service/app.service';
 import { ErrorcodesModule } from './errorcodes/errorcodes.module';
 import { ApiUtils } from './devutils/apiutils.route';
 import { ErrorFilter } from './service/errorhandler.service';
-import { ErrorcodesService } from './errorcodes/errorcodes.service';
-import { LogService } from './service/logger.service';
-//import { OrderService } from './order/order.service';
 import { OrderModule } from './devutils/order/order.module';
+import { AuthModule } from './devutils/auth/auth.module';
+import { SharedModule } from './shared.module';
+import { AuthController } from './devutils/auth/auth.controller';
+import { OrderController } from './devutils/order/order.controller';
 
 /*
 * Main module and Database connection configuration
 */
 @Module({
-  imports: [TypeOrmModule.forRoot(), ErrorcodesModule, OrderModule],
+  imports: [TypeOrmModule.forRoot(), ErrorcodesModule, OrderModule, AuthModule, SharedModule],
   controllers: [AppController, ApiUtils],
-  providers: [LogService, AppService, ErrorcodesService, {
+  providers: [{
     provide: APP_FILTER,
     useClass: ErrorFilter,
-  }],
-  exports: [LogService, AppService, ErrorcodesService]
+  }]
 })
 
 
@@ -44,9 +43,9 @@ export class AppModule implements NestModule {
     consumer
       .apply(DefaultMiddleware)
       .forRoutes('*')
-    // .apply(AuthMiddleware)
-    // .exclude()// add excluded routes which don't to pass through auth middleware 
-    // .forRoutes()//Add contrller name
+      .apply(AuthMiddleware)
+      //.exclude()// add excluded routes which don't to pass through auth middleware 
+      .forRoutes(OrderController)//Add contrller name
   }
 
 }
