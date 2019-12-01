@@ -8,7 +8,7 @@ import { AppService } from '../../service/app.service';
 import { OrderService } from './order.service';
 import { LogService } from '../../service/logger.service';
 
-import { APIResponseMetadataDTO } from 'src/dto/apiresponse.metadata.dto';
+import { APIResponseMetadataDTO } from '../../dto/apiresponse.metadata.dto';
 import { OrderListAPIRespDTO } from './dto/apiresponse.order.dto'
 import { CreateOrderDTO, OrderIdDTO } from './dto/apirequest.validator.dto'
 

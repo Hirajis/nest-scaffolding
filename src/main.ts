@@ -17,7 +17,9 @@ require('dotenv').config({ "path": './secured/.env' });
 
 
 /* Define port */
-const port = process.env.PORT || 8081;
+const port = process.env.PORT || 8080;
+const apiVersion = process.env.VERSION || 'v1';
+const nodeEnv = process.env.NODE_ENV || 'development';
 
 
 async function bootstrap() {
@@ -31,7 +33,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.use(bodyParser.json());
   app.enableCors();
-  app.setGlobalPrefix(process.env.VERSION);
+  app.setGlobalPrefix(apiVersion);
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', '/src/views'))
   app.setViewEngine('ejs');
@@ -40,20 +42,20 @@ async function bootstrap() {
   const options = new DocumentBuilder()
     .setTitle('Nest Js Scaffolding')
     .setDescription('Put your application description if you are using this scaffolding')
-    .setVersion(process.env.SwaggerVersion)
+    .setVersion('3.0')
     .addBearerAuth('Authorization', 'header', 'apiKey')
     .setSchemes("https", "http")
-    .setBasePath(process.env.VERSION)
+    .setBasePath(apiVersion)
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup(`${process.env.VERSION}/docs`, app, document);
+  SwaggerModule.setup(`${apiVersion}/docs`, app, document);
 
   await app.listen(port);
 
-  Logger.debug(`APIVERSION = ${process.env.VERSION}`);
+  Logger.debug(`APIVERSION = ${apiVersion}`);
   Logger.debug(`PORT = ${port}`);
-  Logger.debug(`NODE_ENV = ${process.env.NODE_ENV}`);
+  Logger.debug(`NODE_ENV = ${nodeEnv}`);
 }
 
 bootstrap();

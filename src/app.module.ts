@@ -16,7 +16,7 @@ import { ApiUtils } from './devutils/apiutils.route';
 import { ErrorFilter } from './service/errorhandler.service';
 import { OrderModule } from './devutils/order/order.module';
 import { AuthModule } from './devutils/auth/auth.module';
-import { SharedModule } from './shared.module';
+import { SharedModule } from './shared/shared.module';
 import { AuthController } from './devutils/auth/auth.controller';
 import { OrderController } from './devutils/order/order.controller';
 
