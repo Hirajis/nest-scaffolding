@@ -37,6 +37,9 @@ $ npm install
 ## First install nestjs cli on your local machine with command
 npm i -g @nestjs/cli
 
+## install copy files npm on your local machine with following command to copy required files into dist folder for build  
+npm i copyfiles -g
+
 ## Set the typeorm configuration to connect db
 ```
 1. Create ormconfig.json file in root directory if it is not exist
@@ -77,7 +80,7 @@ $ npm run start
 $ npm run start:dev
 
 ## production mode
-$ npm run start:prod
+$ npm run production
 
 ## Test
 ```
