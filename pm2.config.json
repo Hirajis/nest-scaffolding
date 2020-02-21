@@ -1,0 +1,37 @@
+{
+    "apps": [
+        {
+            "name": "dev-app",
+            "script": "./src/main.js",
+            "cwd": "src",
+            "watch": false,
+            "env": {
+                "APIVERSION": "v1",
+                "NODE_ENV": "development",
+                "PORT": "8080"
+            }
+        },
+        {
+            "name": "qa-app",
+            "script": "src/main.js",
+            "cwd": "src",
+            "watch": false,
+            "env": {
+                "APIVERSION": "v2",
+                "NODE_ENV": "qa",
+                "PORT": "8081"
+            }
+        },
+        {
+            "name": "prod-app",
+            "script": "src/main.js",
+            "cwd": "src",
+            "watch": false,
+            "env": {
+                "APIVERSION": "v1",
+                "NODE_ENV": "production",
+                "PORT": "8082"
+            }
+        }
+    ]
+}
