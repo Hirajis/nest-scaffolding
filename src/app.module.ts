@@ -1,15 +1,9 @@
-/*
-* Nest & Third party imports
-*/
-import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer, RequestMethod, forwardRef } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
-/*
-* Custom imports
-*/
 import { DefaultMiddleware } from './middleware/default.middleware';
 import { AuthMiddleware } from './middleware/auth.middleware';
+//import { OAuth2Middleware } from './middleware/oauth2.middleware';
 import { AppController } from './app.controller';
 import { ErrorcodesModule } from './errorcodes/errorcodes.module';
 import { ApiUtils } from './devutils/apiutils.route';
@@ -17,14 +11,26 @@ import { ErrorFilter } from './service/errorhandler.service';
 import { OrderModule } from './devutils/order/order.module';
 import { AuthModule } from './devutils/auth/auth.module';
 import { SharedModule } from './shared/shared.module';
-import { AuthController } from './devutils/auth/auth.controller';
 import { OrderController } from './devutils/order/order.controller';
+import { SchedulerModule } from './devutils/scheduler/scheduler.module';
+//import { ScheduleModule } from 'nest-schedule';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TasksService } from './devutils/tasks/tasks.service';
+import { TasksModule } from './devutils/tasks/tasks.module';
+
+/*
+* Nest & Third party imports
+*/
+
+/*
+* Custom imports
+*/
 
 /*
 * Main module and Database connection configuration
 */
 @Module({
-  imports: [TypeOrmModule.forRoot(), ErrorcodesModule, OrderModule, AuthModule, SharedModule],
+  imports: [TypeOrmModule.forRoot(), ScheduleModule.forRoot(), ErrorcodesModule, OrderModule, AuthModule, SharedModule, SchedulerModule],
   controllers: [AppController, ApiUtils],
   providers: [{
     provide: APP_FILTER,
@@ -44,7 +50,7 @@ export class AppModule implements NestModule {
       .apply(DefaultMiddleware)
       .forRoutes('*')
       .apply(AuthMiddleware)
-      //.exclude()// add excluded routes which don't to pass through auth middleware 
+      //.apply(OAuth2Middleware)
       .forRoutes(OrderController)//Add contrller name
   }
 

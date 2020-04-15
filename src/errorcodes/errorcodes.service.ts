@@ -46,10 +46,11 @@ export class ErrorcodesService {
                 const filteredItem = filtered[0];
 
                 if (filteredItem.canOverrideMessage) {
-                    errMsg = errMsg || filteredItem.message;
 
-                    if (errMsg === '') {
-                        errMsg = filteredItem.message;
+                    if (typeof errMsg === 'object') {
+                        errMsg = Object.values(errMsg.message[0].constraints)[0];
+                    } else {
+                        errMsg = errMsg || filteredItem.message;
                     }
 
                 } else {

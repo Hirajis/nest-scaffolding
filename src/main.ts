@@ -18,7 +18,7 @@ require('dotenv').config({ "path": './secured/.env' });
 
 /* Define port */
 const port = process.env.PORT || 8080;
-const apiVersion = process.env.VERSION || 'v1';
+const apiVersion = process.env.APIVERSION || 'v1';
 const nodeEnv = process.env.NODE_ENV || 'development';
 
 

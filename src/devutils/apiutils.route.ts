@@ -3,6 +3,7 @@
 */
 import { Get, Req, Res, Controller, Post, UnauthorizedException } from "@nestjs/common";
 import { ApiExcludeEndpoint } from "@nestjs/swagger";
+import * as crypto from 'crypto';
 
 /* 
 *Custom imports
@@ -18,109 +19,56 @@ import { AppService } from "../service/app.service";
 export class ApiUtils {
 
     MODULENAME = "ApiUtils";
-
-    constructor(private logger: LogService, private appService: AppService) { }
+    constructor(private logger: LogService, private appService: AppService) {
+    }
 
     /**
-     * 
-     * @param req 
-     * @param res - render on html template
-     */
-    @Get()
-    @ApiExcludeEndpoint()
-    authToken(@Req() req, @Res() res) {
-
-        let taskname = "Auth token get method";
+ * Encrypts string
+ * @param {String} evUniqueID EV unique ID
+ * @param {String} clearText String to encrypt
+ */
+    encrypt(evUniqueID, clearText) {
+        const taskName = 'encrypt method';
 
         try {
 
-            this.logger.debug(`[${req.evUniqueID}](${this.MODULENAME})-(${taskname})`);
+            let cipher = crypto.createCipher('aes256', process.env.encKey);
+            let encrypted = cipher.update(new Buffer(clearText));
+            encrypted = Buffer.concat([encrypted, cipher.final()]);
 
-            // data
-            const curDate = new Date();
-            const expDate = new Date();
+            return encrypted;
+        } catch (e) {
+            this.logger.error(`[${evUniqueID}] ${this.MODULENAME}(${taskName}): ${e.message}`);
+            this.logger.debug(`[${evUniqueID}] ${this.MODULENAME}(${taskName}): ${e.stack}`);
 
-            expDate.setSeconds(curDate.getSeconds() + 300);
-
-            const data = {
-                "evUniqueID": req.evUniqueID,
-                "username": 'Safal@1234',
-                "exp": expDate.getTime(),
-                "iat": curDate.getTime(),
-                "useJWT": '',
-                "jwt": '',
-                "errMsg": ''
-            };
-
-            res.render('auth-token', { data: data });
-
-        } catch (error) {
-
-            this.logger.debug(`[${req.evUniqueID}](${this.MODULENAME})-(${taskname})- ${error.stack}`);
-            this.logger.error(`[${req.evUniqueID}](${this.MODULENAME})-(${taskname})- ${error.message}`);
-
-            throw error;
+            throw e;
         }
     }
 
     /**
-     * 
-     * @param res - render on html template
-     * @param req - user payload
+     * Decrypts string
+     * @param {String} evUniqueID EV unique ID
+     * @param {String} encryptedText String to decrypt (in Base64)
      */
-    @Post()
-    @ApiExcludeEndpoint()
-    async encodeJWT(@Req() req, @Res() res) {
-
-        let taskName = "Auth token encode";
+    decrypt(evUniqueID, encryptedText) {
+        const taskName = 'decrypt method';
 
         try {
+            let decipher = crypto.createDecipher('aes256', process.env.encKey);
+            let decrypted = decipher.update(encryptedText);
+            decrypted = Buffer.concat([decrypted, decipher.final()]);
 
-            this.logger.debug(`[${req.evUniqueID}](${this.MODULENAME})-(${taskName})- QueryData: ${JSON.stringify(req.body)}`);
+            return decrypted.toString();
+        } catch (e) {
+            this.logger.error(`[${evUniqueID}] ${this.MODULENAME}(${taskName}): ${e.message}`);
+            this.logger.debug(`[${evUniqueID}] ${this.MODULENAME}(${taskName}): ${e.stack}`);
 
-            const data = {
-                "evUniqueID": req.evUniqueID,
-                "username": req.body.username,
-                "exp": req.body.exp,
-                "iat": req.body.iat,
-                "useJWT": req.body.useJWT ? 'CHECKED' : '',
-                "jwt": req.body.jwt,
-                "errMsg": ''
-            };
-
-
-            let jwtPayload = {
-                "userID": req.body.username,
-                "exp": 0,
-                "iat": 0,
-            };
-
-            // exp and iat - normalize them
-            let exp = new Date(data.exp);
-            let iat = new Date(data.iat);
-
-            data.exp = exp.getTime();
-            data.iat = iat.getTime();
-
-            // exp and iat MUST be in seconds since EPOCH
-            jwtPayload.exp = Math.floor(exp.getTime() / 1000);
-            jwtPayload.iat = Math.floor(iat.getTime() / 1000);
-
-            if (data.useJWT === 'CHECKED') {
-                data.jwt = await this.appService.generateJWT(req.evUniqueID, jwtPayload);
-            } else {
-                data.jwt = await this.appService.generateJWTManual(req.evUniqueID, jwtPayload);
-            }
-
-            res.render('auth-token', { data: data })
-
-        } catch (error) {
-
-            this.logger.debug(`[${req.evUniqueID}](${this.MODULENAME})-(${taskName})- ${error.stack}`);
-            this.logger.error(`[${req.evUniqueID}](${this.MODULENAME})-(${taskName})- ${error.message}`);
-
-            throw error;
-
+            throw e;
         }
     }
+
+
+
+
+
 }

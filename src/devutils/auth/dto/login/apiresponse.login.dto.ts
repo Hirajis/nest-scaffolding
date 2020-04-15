@@ -7,10 +7,10 @@ import { ApiModelProperty } from "@nestjs/swagger";
 * Custome imports
 */
 import { APIResponseMetadataDTO } from '../../../../dto/apiresponse.metadata.dto'
-import { UserLoginRespDTO } from './response.login.dto'
+import { ResponseLoginDTO } from './response.login.dto'
 
-export class UserLoginAPIRespDTO extends APIResponseMetadataDTO {
+export class APIResponseLoginDTO extends APIResponseMetadataDTO {
 
-    @ApiModelProperty({ type: UserLoginRespDTO, description: 'API response data' })
-    result: UserLoginRespDTO
+    @ApiModelProperty({ type: ResponseLoginDTO, description: 'API response data', default: [] })
+    result: ResponseLoginDTO
 }

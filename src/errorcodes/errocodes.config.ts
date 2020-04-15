@@ -20,7 +20,9 @@ export class ErrorCodes {
     //11-50 authentication related error codes
     authErrorCodes = [
         { "code": 11, "message": 'Unauthorized access', "description": 'Unauthorized access', "type": 'ERROR', "canOverrideMessage": false },
-        { "code": 12, "message": 'Invalid token', "description": 'Invalid token', "type": 'ERROR', "canOverrideMessage": false }
+        { "code": 12, "message": 'Invalid token', "description": 'Invalid token', "type": 'ERROR', "canOverrideMessage": false },
+        { "code": 13, "message": 'Token Expired', "description": 'Token Expired', "type": 'ERROR', "canOverrideMessage": false },
+        { "code": 14, "message": 'Refresh token required', "description": 'Refresh token required', "type": 'ERROR', "canOverrideMessage": false }
     ];
 
     //51-100 login related errors 

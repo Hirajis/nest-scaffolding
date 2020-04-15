@@ -32,7 +32,6 @@ export class AuthMiddleware implements NestMiddleware {
 
       let apiMetaData = req.apiMeta;//metadata from default middleware
       let task = this.appService.createTaskMetaData(evUniqueID, taskName, "orders controller executed");//create task
-
       if (req.headers['authorization']) {
 
         try {
@@ -50,12 +49,14 @@ export class AuthMiddleware implements NestMiddleware {
           }
 
         } catch (e) {
-          httpCode = 403;
+          httpCode = 401;
           errorCode = 12;
 
-          this.logger.debug(`[${evUniqueID}](${this.MODULENAME})-(${taskName})- ${e.stack}`);
-          this.logger.error(`[${evUniqueID}](${this.MODULENAME})-(${taskName})- ${e.message}`);
+          if (e.message === "jwt expired") {
+            errorCode = 13;//token expired
+          }
 
+          this.logger.debug(`[${evUniqueID}](${this.MODULENAME})-(${taskName})- ${e.stack}`);
         }
 
       } else {

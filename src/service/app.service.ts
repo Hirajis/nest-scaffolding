@@ -194,4 +194,44 @@ export class AppService {
             throw e;
         }
     }
+
+    /**
+     * Decode jwt and return payload part
+     * @param {String} evUniqueID req unique id
+     * @param {String} token JWT token
+     * @param {string} secretKey key to sign jwt
+     */
+    jwtDecoder(evUniqueID, token, secretKey) {
+        let taskName = "refreshToken";
+        let respObj = {};
+
+        if (!token) {
+            respObj["httpCode"] = 401;
+            respObj["errorCode"] = 11;//Unauthorized access
+        } else {
+
+            /* verify token method */
+            jwt.verify(token, secretKey, async (err, decoded) => {
+                if (err) {
+                    respObj["httpCode"] = 401;
+                    respObj["errorCode"] = 12;//Invalid access
+
+                    if (err.message === "jwt expired") {
+                        respObj["errorCode"] = 13;//token expired
+                    }
+
+                    this.logger.debug(`[${evUniqueID}]-(${taskName})- ${err.stack}`);
+
+                    return respObj;
+                }
+
+                respObj = decoded;
+
+            });
+
+
+        }
+
+        return respObj;
+    }
 }

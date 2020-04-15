@@ -1,5 +1,5 @@
 import { Controller, Get, Req, Res, Query, Param, Post, Delete, Body } from '@nestjs/common';
-import { ApiResponse, ApiOperation } from '@nestjs/swagger';
+import { ApiResponse, ApiOperation, ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 
 /* 
 * Custome imports
@@ -9,9 +9,11 @@ import { OrderService } from './order.service';
 import { LogService } from '../../service/logger.service';
 
 import { APIResponseMetadataDTO } from '../../dto/apiresponse.metadata.dto';
-import { OrderListAPIRespDTO } from './dto/apiresponse.order.dto'
-import { CreateOrderDTO, OrderIdDTO } from './dto/apirequest.validator.dto'
+import { OrderListAPIRespDTO } from './dto/apiresponse.order.dto';
+import { CreateOrderDTO, OrderIdDTO } from './dto/apirequest.validator.dto';
 
+@ApiBearerAuth()
+@ApiUseTags('orders')
 @Controller('orders')
 export class OrderController {
     MODULENAME = "OrderController";

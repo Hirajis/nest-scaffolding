@@ -28,6 +28,10 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Nest Scaffolding 
+
+[Nest scaffolding](./docs/scaffolding.md)
+
 ## Installation
 
 ```bash
@@ -44,15 +48,15 @@ npm i copyfiles -g
 ```
 1. Create ormconfig.json file in root directory if it is not exist
 
-2. Put db creds in ormconfig.json file
+2. Put db creds in ormconfig.js file
   Example:
-  {
+  module.exports = {
     "type": "mysql",
-    "port": 3306,
-    "host": "localhost",
-    "username": "root",
-    "password": "",
-    "database": "test",
+    "port": process.env.DBPORT,
+    "host": process.env.HOST,
+    "username": process.env.DBUSER,
+    "password": process.env.DBPASSWORD,
+    "database": process.env.DATABASE,
     "entities": [
         "src/**/*.entity{.ts,.js}"
     ],
@@ -71,16 +75,42 @@ npm i copyfiles -g
 
 
 ```
-## Running the app
 
-## development without watch mode
+## Using OKTA for your web/mobile app for authentication? 
+```
+If you are using OKTA to add authentication to your web/mobile app and using Node.js to validate token sent by OKTA on server after authentication then you must follow the following steps in your project directory
+
+1. Use `oauth2.middleware.ts` to verify access token sent by OKTA and allow users to access resources if token is valid 
+2. Remove `auth.middleware.ts` file from your project directory
+3. Uncomment .apply(OAuth2Middleware) and its import and remove .apply(AuthMiddleware) and its import from app.module.ts file.
+4. Update OKTA configuration for JWT verification in oauth2.middleware.ts file 
+5. For more detail refer https://developer.okta.com/quickstart/#/angular/nodejs/express 
+```
+
+## Running the app on developers machine
+
+## Development without watch mode
 $ npm run start
 
-## development with watch mode
+## Development with watch mode
 $ npm run start:dev
 
-## production mode
-$ npm run production
+## create build
+$ npm run prestart:build
+
+## Running the app on deployment server
+
+## We are using pm2 on server to run the app
+Install PM2 `$ npm install pm2 -g` on server to run the app 
+
+## dev server 
+$ npm run devservermode
+
+## qa server 
+$ npm run qaservermode
+
+## production server
+$ npm run prodservermode
 
 ## Test
 ```
