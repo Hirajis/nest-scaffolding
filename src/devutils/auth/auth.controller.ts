@@ -7,10 +7,10 @@ import { ApiOperation, ApiResponse, ApiUseTags } from '@nestjs/swagger';
 /**
  * Custom imports
  */
-import { LogService } from '../../service/logger.service';
-import { AppService } from '../../service/app.service';
+import { LogService } from '../../shared/service/logger.service';
+import { AppService } from '../../shared/service/app.service';
 import { AuthService } from './auth.service';
-import { APIResponseMetadataDTO } from '../../dto/apiresponse.metadata.dto';
+import { APIResponseMetadataDTO } from '../../shared/dto/apiresponse.metadata.dto';
 import { APIResponseLoginDTO } from './dto/login/apiresponse.login.dto';
 import { APIRequestLoginValidatorDTO } from './dto/login/apirequest.login.validator.dto';
 import { APIRequestTokenValidatorDTO } from './dto/token/apirequest.token.validator.dto';

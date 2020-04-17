@@ -1,13 +1,13 @@
 import { Module, NestModule, MiddlewareConsumer, RequestMethod, forwardRef } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DefaultMiddleware } from './middleware/default.middleware';
-import { AuthMiddleware } from './middleware/auth.middleware';
+import { DefaultMiddleware } from './shared/middleware/default.middleware';
+import { AuthMiddleware } from './shared/middleware/auth.middleware';
 //import { OAuth2Middleware } from './middleware/oauth2.middleware';
 import { AppController } from './app.controller';
-import { ErrorcodesModule } from './errorcodes/errorcodes.module';
+import { ErrorcodesModule } from './shared/errorcodes/errorcodes.module';
 import { ApiUtils } from './devutils/apiutils.route';
-import { ErrorFilter } from './service/errorhandler.service';
+import { ErrorFilter } from './shared/service/errorhandler.service';
 import { OrderModule } from './devutils/order/order.module';
 import { AuthModule } from './devutils/auth/auth.module';
 import { SharedModule } from './shared/shared.module';

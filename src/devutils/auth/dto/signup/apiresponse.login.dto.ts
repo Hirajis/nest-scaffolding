@@ -9,7 +9,7 @@ import { ApiModelProperty } from "@nestjs/swagger";
 import { APIResponseMetadataDTO } from '../../../../shared/dto/apiresponse.metadata.dto'
 import { ResponseSignupDTO } from "./response.signup.dto";
 
-export class APIResponseSignupDTO extends APIResponseMetadataDTO {
+export class UserSignupAPIRespDTO extends APIResponseMetadataDTO {
 
     @ApiModelProperty({ type: ResponseSignupDTO, description: 'API response data' })
     result: ResponseSignupDTO

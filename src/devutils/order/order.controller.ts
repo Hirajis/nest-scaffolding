@@ -4,11 +4,11 @@ import { ApiResponse, ApiOperation, ApiUseTags, ApiBearerAuth } from '@nestjs/sw
 /* 
 * Custome imports
 */
-import { AppService } from '../../service/app.service';
+import { AppService } from '../../shared/service/app.service';
 import { OrderService } from './order.service';
-import { LogService } from '../../service/logger.service';
+import { LogService } from '../../shared/service/logger.service';
 
-import { APIResponseMetadataDTO } from '../../dto/apiresponse.metadata.dto';
+import { APIResponseMetadataDTO } from '../../shared/dto/apiresponse.metadata.dto';
 import { OrderListAPIRespDTO } from './dto/apiresponse.order.dto';
 import { CreateOrderDTO, OrderIdDTO } from './dto/apirequest.validator.dto';
 

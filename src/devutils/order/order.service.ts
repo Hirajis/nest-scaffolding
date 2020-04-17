@@ -4,8 +4,8 @@ import { Repository, getConnection } from 'typeorm';
 
 import { Order } from './entity/order.entity';
 import { OrderDTO } from './dto/response.order.dto';
-import { TwilioSmsService } from 'src/service/twilio/twilio.sms.service';
-import { TwilioEmailService } from 'src/service/twilio/twilio.email.service';
+import { TwilioSmsService } from '../../shared/service/twilio/twilio.sms.service';
+import { TwilioEmailService } from '../../shared/service/twilio/twilio.email.service';
 
 @Injectable()
 export class OrderService {

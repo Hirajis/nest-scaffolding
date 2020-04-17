@@ -2,7 +2,7 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { CronExpression, SchedulerRegistry, Cron } from '@nestjs/schedule';
 import { CronJob } from 'cron';
 import * as _ from 'lodash';
-import { LogService } from 'src/service/logger.service';
+import { LogService } from '../../shared/service/logger.service';
 import { TasksService } from '../tasks/tasks.service'
 import { SchedulerQueryBuilderService } from './scheduler.query.builder';
 
@@ -49,35 +49,35 @@ export class SchedulerService implements OnModuleInit {
     /**
      * Reschedule failed job
      */
-    @Cron('5 * * * * *')
-    async rescheduleJobs() {
-        const taskName = "rescheduleJobs method";
+    // @Cron('5 * * * * *')
+    // async rescheduleJobs() {
+    //     const taskName = "rescheduleJobs method";
 
-        try {
-            let jobs = await this.queryService.getJobsByJobState('Error');
+    //     try {
+    //         let jobs = await this.queryService.getJobsByJobState('Error');
 
-            jobs.forEach((job) => {
+    //         jobs.forEach((job) => {
 
-                if (job.isActive && job.jobState == 'Error') {
+    //             if (job.isActive && job.jobState == 'Error') {
 
-                    if (job.jobType == 'cron') {
-                        this.registerCronJob(job.id, job.name, job.cronPattern);
-                    } else if (job.jobType == 'interval') {
-                        this.registerIntervalJob(job.id, job.name, job.cronTimeInMs);
-                    } else if (job.jobType == 'timeout') {
-                        this.registerTimeoutJob(job.id, job.name, job.cronTimeInMs);
-                    }
+    //                 if (job.jobType == 'cron') {
+    //                     this.registerCronJob(job.id, job.name, job.cronPattern);
+    //                 } else if (job.jobType == 'interval') {
+    //                     this.registerIntervalJob(job.id, job.name, job.cronTimeInMs);
+    //                 } else if (job.jobType == 'timeout') {
+    //                     this.registerTimeoutJob(job.id, job.name, job.cronTimeInMs);
+    //                 }
 
-                }
+    //             }
 
-            })
-        } catch (e) {
-            this.logger.debug(`(${this.MODULENAME})-(${taskName})- ${e.stack}`);
-            this.logger.error(`(${this.MODULENAME})-(${taskName})- ${e.message}`);
+    //         })
+    //     } catch (e) {
+    //         this.logger.debug(`(${this.MODULENAME})-(${taskName})- ${e.stack}`);
+    //         this.logger.error(`(${this.MODULENAME})-(${taskName})- ${e.message}`);
 
-            throw e;
-        }
-    }
+    //         throw e;
+    //     }
+    // }
 
     /**
      * delete the job by job id

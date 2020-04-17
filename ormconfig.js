@@ -8,6 +8,5 @@ module.exports = {
     "entities": [
         "src/**/*.entity{.ts,.js}"
     ],
-    "synchronize": false,
-    "logging": true
+    "synchronize": false
 }

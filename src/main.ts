@@ -12,7 +12,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 * custom imports
 */
 import { AppModule } from './app.module';
-import { LogService } from './service/logger.service';
+import { LogService } from './shared/service/logger.service';
 require('dotenv').config({ "path": './secured/.env' });
 
 

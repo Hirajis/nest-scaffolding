@@ -8,8 +8,8 @@ import * as crypto from 'crypto';
 /* 
 *Custom imports
 */
-import { LogService } from '../service/logger.service';
-import { AppService } from "../service/app.service";
+import { LogService } from '../shared/service/logger.service';
+import { AppService } from "../shared/service/app.service";
 
 
 /* 

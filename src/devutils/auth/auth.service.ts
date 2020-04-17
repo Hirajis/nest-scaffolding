@@ -11,7 +11,7 @@ import { Repository, getConnection } from 'typeorm';
  */
 import { Login } from './entity/login.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AppService } from 'src/service/app.service';
+import { AppService } from '../../shared/service/app.service';
 
 @Injectable()
 export class AuthService {

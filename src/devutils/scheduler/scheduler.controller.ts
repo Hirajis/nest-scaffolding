@@ -1,9 +1,9 @@
 import { Controller, Get, Req, Res, Delete, Query, Put, Post, Body, Param } from '@nestjs/common';
 import { SchedulerService } from './scheduler.service';
 import { ApiResponse, ApiOperation, ApiUseTags } from '@nestjs/swagger';
-import { LogService } from 'src/service/logger.service';
-import { AppService } from 'src/service/app.service';
-import { APIResponseMetadataDTO } from 'src/dto/apiresponse.metadata.dto';
+import { LogService } from '../../shared/service/logger.service';
+import { AppService } from '../../shared/service/app.service';
+import { APIResponseMetadataDTO } from 'src/shared/dto/apiresponse.metadata.dto';
 
 @ApiUseTags('scheduler')
 @Controller('scheduler/job')

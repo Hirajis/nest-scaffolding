@@ -9,9 +9,9 @@ import * as moment from 'moment';
 /* 
 * Custome imports
 */
-import { AppService } from './service/app.service';
-import { LogService } from './service/logger.service';
-import { ResponseMetadataDTO } from './dto/response.metadata.dto';
+import { AppService } from './shared/service/app.service';
+import { LogService } from './shared/service/logger.service';
+import { ResponseMetadataDTO } from './shared/dto/response.metadata.dto';
 
 @Controller('ping')
 export class AppController {
