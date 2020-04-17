@@ -30,7 +30,7 @@ import { TasksModule } from './devutils/tasks/tasks.module';
 * Main module and Database connection configuration
 */
 @Module({
-  imports: [TypeOrmModule.forRoot(), ScheduleModule.forRoot(), ErrorcodesModule, OrderModule, AuthModule, SharedModule, SchedulerModule],
+  imports: [TypeOrmModule.forRoot(), ErrorcodesModule, OrderModule, AuthModule, SharedModule],
   controllers: [AppController, ApiUtils],
   providers: [{
     provide: APP_FILTER,
