@@ -21,9 +21,9 @@ export class OrderService {
             .execute()
 
         const data = {
-            to: '+918857880616',
-            // to1: 'sourabh.mali@compumatrice.com',
-            from: 'safal.tammewar@compumatrice.com',
+            to: '+911234567890',
+            // to1: 'abc.xyz@gmail.com',
+            from: 'xyz.abc@mailinator.com',
             subject: 'Just for testing',
             text: 'Just for testing enjoy'
         }
